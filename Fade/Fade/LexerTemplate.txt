@@ -29,11 +29,14 @@ namespace {0}
 
         private readonly Dictionary<string, Regex> ruleDictionary = new Dictionary<string, Regex>();
 
+        private readonly List<string> skipRuleList = new List<string>();
+
         private int startIndex;
 
         public {3}(string content) {{
             this.content = content;
 {4}
+{5}
         }}
 
         public Token GetToken() {{
@@ -45,6 +48,9 @@ namespace {0}
                     startIndex += value.Length;
                     TokenType tokenType;
                     Enum.TryParse(regex.Key, out tokenType);
+                    if (skipRuleList.Contains(regex.Key)) {{
+                        return GetToken();
+                    }}
                     return new Token(value, tokenType);
                 }}
             }}

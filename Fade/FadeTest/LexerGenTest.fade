@@ -1,11 +1,11 @@
 {
     "config" : {
-        "skip" : [ "whitespace" ],
+        "skip" : [ "Whitespace" ],
         "namespace" : "FadeLexerGenTest",
         "lexRuleName" : "HelloFade"
     },
     "rule" : {
         "Whitespace" : @"[ \t\r\n]",
-        "digit": "[0-9]"
+        "Number": "[0-9]+"
     }
 }

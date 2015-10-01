@@ -38,12 +38,18 @@ namespace Fade
             }
             tokenTypeTemplate.Remove(tokenTypeTemplate.Length - 2, 1);
 
+            var skipListTemplate = new StringBuilder();
+            foreach (var skipRule in skipList) {
+                skipListTemplate.Append($"            skipRuleList.Add(\"{skipRule}\");\n");
+            }
+
             //read the lexer template
             var template = File.ReadAllText("LexerTemplate.txt", Encoding.UTF8);
             File.WriteAllText(path, string.Format(template, namespaceName,
                 tokenTypeTemplate,
                 lexRuleName,
                 lexRuleName,
+                skipListTemplate,
                 ruleTemplate
             ));
         }
