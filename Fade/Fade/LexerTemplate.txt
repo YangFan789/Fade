@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
+namespace {0}
+{{
+    public enum TokenType
+    {{
+{1}    }}
+
+    public class Token
+    {{
+        public string Value {{ get; }}
+        public TokenType TokenType {{ get; }}
+
+        public Token(string value, TokenType tokenType) {{
+            TokenType = tokenType;
+            Value = value;
+        }}
+
+        public override string ToString() {{
+            return Value;
+        }}
+    }}
+
+    public class {2}
+    {{
+        private readonly string content;
+
+        private readonly Dictionary<string, Regex> ruleDictionary = new Dictionary<string, Regex>();
+
+        private int startIndex;
+
+        public {3}(string content) {{
+            this.content = content;
+{4}
+        }}
+
+        public Token GetToken() {{
+            foreach (var regex in ruleDictionary) {{
+                var re = regex.Value;
+                if (re.IsMatch(content, startIndex)) {{
+                    var result = re.Match(content, startIndex);
+                    var value = result.Value;
+                    startIndex += value.Length;
+                    TokenType tokenType;
+                    Enum.TryParse(regex.Key, out tokenType);
+                    return new Token(value, tokenType);
+                }}
+            }}
+            return null;
+        }}
+    }}
+}}
