@@ -33,6 +33,7 @@ A general Fade tokenizer definition file is like the following.
 ### Differences between fade file and Json file
 The definition of Fade file is just like Json, but not very simliar with Json.
 Here are 3 differences with Json. These features are impled by FadeJson.
+
 1. Comments support.
 2. Original String support. Like
 ```

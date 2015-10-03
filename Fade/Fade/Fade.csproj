@@ -45,6 +45,12 @@
   <ItemGroup>
     <Compile Include="LexerGenerater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegularExpressions\Lexer.cs" />
+    <Compile Include="RegularExpressions\Regex.cs" />
+    <Compile Include="RegularExpressions\Parser.cs" />
+    <Compile Include="RegularExpressions\State.cs" />
+    <Compile Include="RegularExpressions\Token.cs" />
+    <Compile Include="RegularExpressions\TokenType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -34,7 +34,8 @@ namespace Fade
             foreach (var key in ruleList.Keys) {
                 var value = ruleList[key].ToString();
                 tokenTypeTemplate.Append($"        {key},\n");
-                ruleTemplate.Append($"            ruleDictionary.Add(\"{key}\", new Regex(\"{value}\", RegexOptions.Compiled));\n");
+                ruleTemplate.Append(
+                    $"            ruleDictionary.Add(\"{key}\", new Regex(\"{value}\", RegexOptions.Compiled));\n");
             }
             tokenTypeTemplate.Remove(tokenTypeTemplate.Length - 2, 1);
 
@@ -51,7 +52,7 @@ namespace Fade
                 lexRuleName,
                 skipListTemplate,
                 ruleTemplate
-            ));
+                ));
         }
     }
 }

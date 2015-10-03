@@ -1,13 +1,14 @@
 ﻿using System;
 using Fade;
 //using FadeLexerGenTest;
+using Fade.RegularExpressions;
 
 namespace FadeTest
 {
     static class Program
     {
         static void Main(string[] args) {
-            LexerGenerater.FromFile("LexerGenTest.fade").Generate("LexerGenTest.cs");
+            //LexerGenerater.FromFile("LexerGenTest.fade").Generate("LexerGenTest.cs");
             //Console.WriteLine("Done.");
             //{
             //    var lexer = new HelloFade(" \t123456");
@@ -17,7 +18,9 @@ namespace FadeTest
             //        token = lexer.GetToken();
             //    }
             //}
-            //Console.ReadKey();
+            var regex = Regex.Compile("(abab)*");
+            Console.WriteLine(regex.Match("abab"));
+            Console.ReadKey();
         }
     }
 }
