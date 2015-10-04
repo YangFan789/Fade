@@ -4,15 +4,20 @@ namespace Fade.RegularExpressions
 {
     internal class State
     {
-        public State(int name) {
-            Name = name;
-            Transitions = new Dictionary<string, State>();
-            Epsilon = new List<State>();
+#if DEBUG
+        private static int stateCount;
+        private readonly int count;
+        public override string ToString() {
+            return $"s{count}";
         }
 
-        public int Name { get; set; }
-        public bool IsEnd { get; set; }
-        public Dictionary<string, State> Transitions { get; }
-        public List<State> Epsilon { get; set; }
+        public State() {
+            count = stateCount++;
+        }
+#endif
+
+        public bool IsFinalStates { get; set; }
+        public Dictionary<char, State> Transitions { get; } = new Dictionary<char, State>();
+        public HashSet<State> Epsilon { get; } = new HashSet<State>();
     }
 }

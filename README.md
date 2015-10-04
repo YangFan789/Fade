@@ -1,7 +1,11 @@
 # Fade
 Yet another tool for Language Recognition
 
-# Getting Startted
+# What is included in it
+Until now, what we have is a Lexer Generater and a hand-write regaular expression library.
+Implement parser generater is planning.
+
+# Getting Started
 ## import reference and namespace
 ```
 using Fade;
@@ -31,8 +35,8 @@ A general Fade tokenizer definition file is like the following.
 ```
 
 ### Differences between fade file and Json file
-The definition of Fade file is just like Json, but not very simliar with Json.
-Here are 3 differences with Json. These features are impled by FadeJson.
+The definition of Fade file is just like Json, but not a little differs with Json.
+Here are some differences with Json. These features are impled by [FadeJson](https://github.com/YangFan789/FadeJson).
 
 1. Comments support.
 2. Original String support. Like
@@ -43,7 +47,7 @@ or
 ```
 @"""
 Python docstring like
-""" == "\nPython docstring like"
+""" == "\nPython docstring like\n"
 ```
 
 ### Config section
@@ -68,4 +72,4 @@ Python docstring like
 Lex rule name should begin with a capital letter.
 
 # License
-MIT
+MIT License

@@ -15,10 +15,9 @@ namespace Fade.RegularExpressions
         private static void Consume(TokenType tokenType) {
             if (lookaheadToken.Type == tokenType) {
                 lookaheadToken = Lexer.GetToken();
+                return;
             }
-            else if (lookaheadToken.Type != tokenType) {
-                throw new InvalidOperationException("Lookahead token tokenType not equal to argument tokenType.");
-            }
+            throw new InvalidOperationException("Lookahead token tokenType not equal to argument tokenType.");
         }
 
         public static IEnumerable<Token> Parse() {
@@ -37,21 +36,35 @@ namespace Fade.RegularExpressions
 
         private static void ParseTerm() {
             ParseFactor();
-            if (")|".Contains(lookaheadToken.Value)) return;
+            if (")|\0".Contains(lookaheadToken.Value.ToString())) return;
             ParseTerm();
             Tokens.Add(Token.Concat);
         }
 
         private static void ParseFactor() {
             ParsePrimary();
-            if (!new List<TokenType> {
-                TokenType.Star,
-                TokenType.Plus,
-                TokenType.QuestionMark
-            }.Contains(lookaheadToken.Type))
-                return;
-            Tokens.Add(lookaheadToken);
-            Consume(lookaheadToken.Type);
+            switch (lookaheadToken.Type) {
+                case TokenType.Star:
+                case TokenType.Plus:
+                case TokenType.QuestionMark:
+                    Tokens.Add(lookaheadToken);
+                    Consume(lookaheadToken.Type);
+                    break;
+                case TokenType.None:
+                    break;
+                case TokenType.Char:
+                    break;
+                case TokenType.Concat:
+                    break;
+                case TokenType.Alt:
+                    break;
+                case TokenType.LeftParen:
+                    break;
+                case TokenType.RightParen:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private static void ParsePrimary() {

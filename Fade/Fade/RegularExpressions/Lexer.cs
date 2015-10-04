@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Fade.RegularExpressions
 {
+    /// <summary>
+    /// 简单地给pattern中的每个字符标上类型
+    /// </summary>
     internal static class Lexer
     {
         private static readonly Dictionary<char, TokenType> Symbols = new Dictionary<char, TokenType> {
@@ -25,7 +28,7 @@ namespace Fade.RegularExpressions
         public static Token GetToken() {
             if (Current >= Source.Length) return Token.Empty;
             var c = Source[Current++];
-            return new Token(Symbols.ContainsKey(c) ? Symbols[c] : TokenType.Char, new string(c, 1));
+            return new Token(Symbols.ContainsKey(c) ? Symbols[c] : TokenType.Char, c);
         }
     }
 }
