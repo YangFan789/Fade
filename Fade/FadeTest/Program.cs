@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Fade;
-using Fade.RegularExpressions;
+using Regex = Fade.RegularExpressions.Regex;
 
 #if TEST_CLASS_GENERATED
 using FadeLexerGenTest;
@@ -60,13 +62,31 @@ namespace FadeTest
             };
 
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 var loopCount = 0;
                 foreach (var suite in testSuite) {
                     var re = Regex.FromPatternString(suite.Key);
                     var result = re.Match(suite.Value) ? "Pass" : "Failed";
                     Console.WriteLine($"RegexTest {loopCount++} ...{result}");
                 }
+                stopwatch.Stop();
+                Console.WriteLine($"{stopwatch.ElapsedMilliseconds}ms");
             }
+#if !DEBUG
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var loopCount = 0;
+                foreach (var suite in testSuite) {
+                    var re = new System.Text.RegularExpressions.Regex(suite.Key);
+                    var result = re.IsMatch(suite.Value) ? "Pass" : "Failed";
+                    Console.WriteLine($"RegexTest {loopCount++} ...{result}");
+                }
+                stopwatch.Stop();
+                Console.WriteLine($"{stopwatch.ElapsedMilliseconds}ms");
+            }
+#endif
             Console.WriteLine();
         }
     }

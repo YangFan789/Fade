@@ -7,41 +7,26 @@ namespace Fade.RegularExpressions
 {
     public class Regex
     {
-        private static readonly Dictionary<TokenType, HandlerDelegate> HandlerDictionary =
-            new Dictionary<TokenType, HandlerDelegate> {
-                [TokenType.Char] = HandleChar,
-                [TokenType.Concat] = HandleConcat,
-                [TokenType.Alt] = HandleAlt,
-                [TokenType.Star] = HandleRepeat,
-                [TokenType.QuestionMark] = HandleQuestionMark,
-                [TokenType.Plus] = HandleRepeat
-            };
-
-        private static readonly Stack<Regex> RegexStack = new Stack<Regex>();
-
-        private Regex(State start, State end) {
+        public Regex(State start, State end) {
             Start = start;
             End = end;
             End.IsFinalStates = true;
         }
 
-        private delegate void HandlerDelegate(Token token);
+        public State End { get; }
+        
+        public State Start { get; }
 
-        private State End { get; }
-
-        private string Pattern { get; set; }
-        private State Start { get; }
+        private static readonly Dictionary<string, Regex> RegexCache = new Dictionary<string, Regex>();
 
         public static Regex FromPatternString(string p) {
+            if (RegexCache.ContainsKey(p)) {
+                return RegexCache[p];
+            }
             Lexer.Init(p);
             Parser.Init();
-            var tokens = Parser.Parse();
-            foreach (var token in tokens) {
-                Handle(token);
-            }
-            
-            var regex = RegexStack.Pop();
-            regex.Pattern = p;
+            var regex = Parser.Parse();
+            RegexCache.Add(p, regex);
             return regex;
         }
 
@@ -58,101 +43,27 @@ namespace Fade.RegularExpressions
             }
         }
 
-        public bool Match(string s) {
+        public bool Match(string matchString) {
             var currentStates = new HashSet<State>();
             AddState(Start, currentStates);
-            foreach (var c in s) {
+            foreach (var chr in matchString) {
                 var nextStates = new HashSet<State>();
-                foreach (var state in currentStates) {
-                    if (state.Transitions.Keys.Contains(c)) {
-                        var transState = state.Transitions[c];
-                        AddState(transState, nextStates);
-                    }
+                var stateList = from state in currentStates
+                    where state.Transitions.Keys.Contains(chr)
+                    select state.Transitions[chr];
+                foreach (var transState in stateList) {
+                    AddState(transState, nextStates);
                 }
                 currentStates = nextStates;
             }
             return currentStates.Any(state => state.IsFinalStates);
         }
-
-        public override string ToString() {
-            return Pattern;
-        }
-
+        
         private static void AddState(State state, ISet<State> states) {
-            if (states.Contains(state)) {
-                return;
-            }
             states.Add(state);
             foreach (var eps in state.Epsilon) {
                 AddState(eps, states);
             }
-        }
-
-        private static void Handle(Token token) {
-            HandlerDictionary[token.Type](token);
-        }
-
-        private static void HandleAlt(Token token) {
-            var rs = RegexStack;
-            var n2 = RegexStack.Pop();
-            var n1 = RegexStack.Pop();
-            var s0 = new State();
-            s0.Epsilon.Add(n1.Start);
-            s0.Epsilon.Add(n2.Start);
-            var s3 = new State();
-            n1.End.Epsilon.Add(s3);
-            n2.End.Epsilon.Add(s3);
-            n1.End.IsFinalStates = false;
-            n2.End.IsFinalStates = false;
-            var nfa = new Regex(s0, s3);
-            RegexStack.Push(nfa);
-        }
-
-        private static void HandleChar(Token token) {
-            var s0 = new State();
-            var s1 = new State();
-            if (s0.Transitions.ContainsKey(token.Value)) {
-                s0.Transitions[token.Value] = s1;
-            }
-            else {
-                s0.Transitions.Add(token.Value, s1);
-            }
-            var nfa = new Regex(s0, s1);
-            RegexStack.Push(nfa);
-        }
-
-        private static void HandleConcat(Token token) {
-            var n2 = RegexStack.Pop();
-            var n1 = RegexStack.Pop();
-            n1.End.IsFinalStates = false;
-            n1.End.Epsilon.Add(n2.Start);
-            var nfa = new Regex(n1.Start, n2.End);
-            RegexStack.Push(nfa);
-        }
-
-        private static void HandleQuestionMark(Token token) {
-            var n1 = RegexStack.Pop();
-            n1.Start.Epsilon.Add(n1.End);
-            RegexStack.Push(n1);
-        }
-
-        private static void HandleRepeat(Token token) {
-            var n1 = RegexStack.Pop();
-            var s0 = new State();
-            var s1 = new State();
-            s0.Epsilon.Add(n1.Start);
-            if (token.Type == TokenType.Star) {
-                s0.Epsilon.Add(s1);
-            }
-            n1.End.Epsilon.Add(s1);
-            n1.End.Epsilon.Add(n1.Start);
-            n1.End.IsFinalStates = false;
-            var nfa = new Regex(s0, s1);
-            RegexStack.Push(nfa);
-        }
-
-        private bool Equals(Regex regex) {
-            return Pattern == regex.Pattern;
         }
     }
 }

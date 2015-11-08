@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Fade.RegularExpressions
 {
-    internal class State
+    public class State
     {
 #if DEBUG
         private static int stateCount;
@@ -14,8 +14,9 @@ namespace Fade.RegularExpressions
         public State() {
             count = stateCount++;
         }
+#else
+        public State() { }
 #endif
-
         public bool IsFinalStates { get; set; }
         public Dictionary<char, State> Transitions { get; } = new Dictionary<char, State>();
         public HashSet<State> Epsilon { get; } = new HashSet<State>();

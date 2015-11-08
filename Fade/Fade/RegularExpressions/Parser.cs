@@ -5,11 +5,31 @@ namespace Fade.RegularExpressions
 {
     internal static class Parser
     {
-        private static readonly List<Token> Tokens = new List<Token>();
+        private static readonly Dictionary<TokenType, HandlerDelegate> HandlerDictionary =
+            new Dictionary<TokenType, HandlerDelegate> {
+                [TokenType.Char] = HandleChar,
+                [TokenType.Concat] = HandleConcat,
+                [TokenType.Alt] = HandleAlt,
+                [TokenType.Star] = HandleRepeat,
+                [TokenType.QuestionMark] = HandleQuestionMark,
+                [TokenType.Plus] = HandleRepeat
+            };
+
+        private static readonly Stack<Regex> RegexStack = new Stack<Regex>();
+
         private static Token lookaheadToken;
+
+        private delegate void HandlerDelegate(Token token);
 
         public static void Init() {
             lookaheadToken = Lexer.GetToken();
+            RegexStack.Clear();
+
+        }
+
+        public static Regex Parse() {
+            ParseExpression();
+            return RegexStack.Pop();
         }
 
         private static void Consume(TokenType tokenType) {
@@ -20,9 +40,61 @@ namespace Fade.RegularExpressions
             throw new InvalidOperationException("Lookahead token tokenType not equal to argument tokenType.");
         }
 
-        public static IEnumerable<Token> Parse() {
-            ParseExpression();
-            return Tokens;
+        private static void Handle(Token token) {
+            HandlerDictionary[token.Type](token);
+        }
+
+        private static void HandleAlt(Token token) {
+            var n2 = RegexStack.Pop();
+            var n1 = RegexStack.Pop();
+            var s0 = new State();
+            s0.Epsilon.Add(n1.Start);
+            s0.Epsilon.Add(n2.Start);
+            var s3 = new State();
+            n1.End.Epsilon.Add(s3);
+            n2.End.Epsilon.Add(s3);
+            n1.End.IsFinalStates = false;
+            n2.End.IsFinalStates = false;
+            var regex = new Regex(s0, s3);
+            RegexStack.Push(regex);
+        }
+
+        private static void HandleChar(Token token) {
+            var s0 = new State();
+            var s1 = new State();
+            s0.Transitions.Add(token.Value, s1);
+            var regex = new Regex(s0, s1);
+            RegexStack.Push(regex);
+        }
+
+        private static void HandleConcat(Token token) {
+            var n2 = RegexStack.Pop();
+            var n1 = RegexStack.Pop();
+            n1.End.IsFinalStates = false;
+            n1.End.Epsilon.Add(n2.Start);
+            var regex = new Regex(n1.Start, n2.End);
+            RegexStack.Push(regex);
+        }
+
+        private static void HandleQuestionMark(Token token) {
+            var n1 = RegexStack.Pop();
+            n1.Start.Epsilon.Add(n1.End);
+            RegexStack.Push(n1);
+        }
+
+        private static void HandleRepeat(Token token) {
+            var n1 = RegexStack.Pop();
+            var s0 = new State();
+            var s1 = new State();
+            s0.Epsilon.Add(n1.Start);
+            if (token.Type == TokenType.Star) {
+                s0.Epsilon.Add(s1);
+            }
+            n1.End.Epsilon.Add(s1);
+            n1.End.Epsilon.Add(n1.Start);
+            n1.End.IsFinalStates = false;
+            var regex = new Regex(s0, s1);
+            RegexStack.Push(regex);
         }
 
         private static void ParseExpression() {
@@ -31,14 +103,7 @@ namespace Fade.RegularExpressions
             var token = lookaheadToken;
             Consume(TokenType.Alt);
             ParseExpression();
-            Tokens.Add(token);
-        }
-
-        private static void ParseTerm() {
-            ParseFactor();
-            if (")|\0".Contains(lookaheadToken.Value.ToString())) return;
-            ParseTerm();
-            Tokens.Add(Token.Concat);
+            Handle(token);
         }
 
         private static void ParseFactor() {
@@ -47,21 +112,28 @@ namespace Fade.RegularExpressions
                 case TokenType.Star:
                 case TokenType.Plus:
                 case TokenType.QuestionMark:
-                    Tokens.Add(lookaheadToken);
+                    Handle(lookaheadToken);
                     Consume(lookaheadToken.Type);
                     break;
+
                 case TokenType.None:
                     break;
+
                 case TokenType.Char:
                     break;
+
                 case TokenType.Concat:
                     break;
+
                 case TokenType.Alt:
                     break;
+
                 case TokenType.LeftParen:
                     break;
+
                 case TokenType.RightParen:
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -74,11 +146,43 @@ namespace Fade.RegularExpressions
                     ParseExpression();
                     Consume(TokenType.RightParen);
                     break;
+
                 case TokenType.Char:
-                    Tokens.Add(lookaheadToken);
+                    Handle(lookaheadToken);
                     Consume(TokenType.Char);
                     break;
+
+                case TokenType.None:
+                    break;
+
+                case TokenType.Star:
+                    break;
+
+                case TokenType.Plus:
+                    break;
+
+                case TokenType.Concat:
+                    break;
+
+                case TokenType.Alt:
+                    break;
+
+                case TokenType.QuestionMark:
+                    break;
+
+                case TokenType.RightParen:
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private static void ParseTerm() {
+            ParseFactor();
+            if (")|\0".Contains(lookaheadToken.Value.ToString())) return;
+            ParseTerm();
+            Handle(Token.Concat);
         }
     }
 }
