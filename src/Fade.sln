@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fade.Test", "Fade.Test\Fade.Test.csproj", "{E03E6B56-1FF3-45A6-930C-8A6E64DFA0B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fade.Diagnostics", "Fade.Diagnostics\Fade.Diagnostics.csproj", "{A231316A-6E43-4DD6-B684-449C274ED5A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fade.RegularExpression", "Fade.RegularExpression\Fade.RegularExpression.csproj", "{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fade.Common", "Fade.Common\Fade.Common.csproj", "{1C41FCDD-69DE-479E-8D20-29C8F358A51D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E03E6B56-1FF3-45A6-930C-8A6E64DFA0B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E03E6B56-1FF3-45A6-930C-8A6E64DFA0B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E03E6B56-1FF3-45A6-930C-8A6E64DFA0B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E03E6B56-1FF3-45A6-930C-8A6E64DFA0B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A231316A-6E43-4DD6-B684-449C274ED5A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A231316A-6E43-4DD6-B684-449C274ED5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A231316A-6E43-4DD6-B684-449C274ED5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A231316A-6E43-4DD6-B684-449C274ED5A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C41FCDD-69DE-479E-8D20-29C8F358A51D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C41FCDD-69DE-479E-8D20-29C8F358A51D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C41FCDD-69DE-479E-8D20-29C8F358A51D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C41FCDD-69DE-479E-8D20-29C8F358A51D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

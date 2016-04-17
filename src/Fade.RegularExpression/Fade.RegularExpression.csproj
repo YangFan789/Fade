@@ -4,19 +4,19 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8C484A8D-AFA0-4EA6-8A12-A2DE7EA8C4C1}</ProjectGuid>
+    <ProjectGuid>{1344A979-1A0A-47AD-84C7-E9E5CD2DB823}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Fade</RootNamespace>
-    <AssemblyName>Fade</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <RootNamespace>Fade.RegularExpression</RootNamespace>
+    <AssemblyName>Fade.RegularExpression</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,15 +24,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FadeJson">
-      <HintPath>..\..\..\FadeJson\src\FadeJson-dotNet46\FadeJson\bin\Release\FadeJson.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,22 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LexerGenerater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegularExpressions\Lexer.cs" />
-    <Compile Include="RegularExpressions\Regex.cs" />
-    <Compile Include="RegularExpressions\Parser.cs" />
-    <Compile Include="RegularExpressions\State.cs" />
-    <Compile Include="RegularExpressions\Token.cs" />
-    <Compile Include="RegularExpressions\TokenType.cs" />
+    <Compile Include="Regex.cs" />
+    <Compile Include="RegexLexer.cs" />
+    <Compile Include="RegexParser.cs" />
+    <Compile Include="RegexState.cs" />
+    <Compile Include="RegexToken.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="LexerTemplate.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\Fade.Common\Fade.Common.csproj">
+      <Project>{1c41fcdd-69de-479e-8d20-29c8f358a51d}</Project>
+      <Name>Fade.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
